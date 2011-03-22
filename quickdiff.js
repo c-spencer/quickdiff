@@ -32,6 +32,19 @@
     return n;
   }
 
+  var checkFilters = function (selectedFilters, a, b) {
+    for (f = 0; f < selectedFilters.length; f++) {
+      if (filters[selectedFilters[f]].condition(a) && filters[selectedFilters[f]].condition(b)) {
+        if (filters[selectedFilters[f]].test(a,b)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+    return undefined;
+  }
+
   // Scan over two DOM trees a, b and return the first path at which they differ.
   var forwardScan = function (a, b, apath, selectedFilters) {
     // Quick exit.
@@ -40,14 +53,11 @@
     }
     
     if (selectedFilters) {
-      for (f = 0; f < selectedFilters.length; f++) {
-        if (filters[selectedFilters[f]].condition(a) && filters[selectedFilters[f]].condition(b)) {
-          if (filters[selectedFilters[f]].test(a,b)) {
-            return apath;
-          } else {
-            return false;
-          }
-        }
+      var check = checkFilters(selectedFilters, a, b);
+      if (check) {
+        return apath;
+      } else if (check === false) {
+        return false;
       }
     }
 
@@ -88,14 +98,11 @@
     }
   
     if (selectedFilters) {
-      for (f = 0; f < selectedFilters.length; f++) {
-        if (filters[selectedFilters[f]].condition(a) && filters[selectedFilters[f]].condition(b)) {
-          if (filters[selectedFilters[f]].test(a,b)) {
-            return [apath, bpath];
-          } else {
-            return false;
-          }
-        }
+      var check = checkFilters(selectedFilters, a, b);
+      if (check) {
+        return [apath, bpath];
+      } else if (check === false) {
+        return false;
       }
     }
     
