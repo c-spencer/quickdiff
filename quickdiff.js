@@ -80,6 +80,8 @@
       } else {
         return false;
       }
+    } else if (aNode || bNode) {
+      return apath;
     } else if (a.data) {
       if (a.data === b.data) {
         return false;
@@ -127,6 +129,8 @@
       } else {
         return false;
       }
+    } else if (aNode || bNode) {
+        return [apath, bpath];
     } else if (a.data) {
       if (a.data === b.data) {
         return false;
