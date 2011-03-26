@@ -1,6 +1,10 @@
 (function ($) {
 
   var filters = {};
+  var attributes = {
+    "td": ["align"],
+    "th": ["align"]
+  }
 
   // Given a root element and a path of offsets, return the targetted element.
   var navigatePath = function (root, path) {
@@ -45,10 +49,23 @@
     return undefined;
   }
 
+  var checkAttributes = function (a, b) {
+    var attrs;
+    if (attrs = attributes[a.nodeName]) {
+      for (var i = 0, len = attrs.length; i < len; i++) {
+        if ($(a).attr(attrs[i]) !==
+              $(b).attr(attrs[i])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   // Scan over two DOM trees a, b and return the first path at which they differ.
   var forwardScan = function (a, b, apath, selectedFilters) {
     // Quick exit.
-    if (a.nodeName !== b.nodeName) {
+    if (a.nodeName !== b.nodeName || checkAttributes(a, b)) {
       return apath;
     }
     
@@ -239,6 +256,13 @@
         filters[name] = {condition: condition, test: test};
       } else {
         delete filters[name];
+      }
+    },
+    attributes: function (newAttributes) {
+      if (newAttributes === undefined) {
+        return attributes;
+      } else {
+        attributes = newAttributes;
       }
     }
   }
