@@ -1,10 +1,7 @@
 (function ($) {
 
   var filters = {};
-  var attributes = {
-    "td": ["align"],
-    "th": ["align"]
-  }
+  var attributes = {};
 
   // Given a root element and a path of offsets, return the targetted element.
   var navigatePath = function (root, path) {
@@ -51,7 +48,7 @@
 
   var checkAttributes = function (a, b) {
     var attrs;
-    if (attrs = attributes[a.nodeName]) {
+    if (attrs = attributes[a.nodeName.toLowerCase()]) {
       for (var i = 0, len = attrs.length; i < len; i++) {
         if ($(a).attr(attrs[i]) !==
               $(b).attr(attrs[i])) {
@@ -112,7 +109,7 @@
 
   // Scan backwards over two DOM trees a, b and return the paths where they differ
   var reverseScan = function (a, b, apath, bpath, selectedFilters) {
-    if (a.nodeName !== b.nodeName) {
+    if (a.nodeName !== b.nodeName || checkAttributes(a, b)) {
       return [apath, bpath];
     }
   
