@@ -106,4 +106,36 @@ test("repeated groups", function () {
   
   a.quickdiff("patch", b);
   equal(innerHTML(a[0]), "<p><span class=\"a\"></span>a</p>");
+});
+
+test("experimental", function () {
+  var a = $('<div><p><span>a</span></p></div>');
+  var b = $('<div><p>a<em>b</em>a</p></div>');
+  
+  a.quickdiff("patch", b);
+  equal(innerHTML(a[0]), "<p>a<em>b</em>a</p>");
+  
+  var a = $('<div><div></div><span></span><div></div><span></span><div></div></div>');
+  var b = $('<div><div></div><span></span><div></div><span></span></div>');
+  
+  a.quickdiff("patch", b);
+  equal(innerHTML(a[0]), "<div></div><span></span><div></div><span></span>");
+  
+  var a = $('<div><p><strong>hi</strong>a<strong>hi</strong>a<strong>hi</strong></p></div>');
+  var b = $('<div><p><strong>hi</strong>a<strong>hi</strong>a</p></div>');
+  
+  a.quickdiff("patch", b);
+  equal(innerHTML(a[0]), "<p><strong>hi</strong>a<strong>hi</strong>a</p>");
+  
+  var a = $('<div><p><em>hi</em><em>hi</em></p></div>');
+  var b = $('<div><p><em>hi</em></p></div>');
+  
+  a.quickdiff("patch", b);
+  equal(innerHTML(a[0]), "<p><em>hi</em></p>");
+  
+  var a = $('<div><p><em>hi</em>a<em>hi</em></p></div>');
+  var b = $('<div><p><em>hi</em></p></div>');
+  
+  a.quickdiff("patch", b);
+  equal(innerHTML(a[0]), "<p><em>hi</em></p>");
 })
