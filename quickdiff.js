@@ -203,11 +203,14 @@
             index: leftPointer-1},
           replace: childNodesSlice(destel, leftPointer, leftPointer + (rightPointerB-rightPointerA))
         };
+      } else if (leftPointer < rightPointerA && leftPointer < rightPointerB) {
+        sourceSegment = childNodesSlice(sourceel, leftPointer, rightPointerA + 1);
+        destSegment = childNodesSlice(destel, leftPointer, rightPointerB + 1);
       } else if (rightPointerB < rightPointerA) {
         sourceSegment = childNodesSlice(sourceel, leftPointer, leftPointer + (rightPointerA-rightPointerB));
         destSegment = childNodesSlice(destel, leftPointer, rightPointerB);
       } else {
-        sourceSegment = childNodesSlice(sourceel, rightPointerA, leftPointer+1);
+        sourceSegment = childNodesSlice(sourceel, rightPointerA, leftPointer + 1);
         destSegment = childNodesSlice(destel, leftPointer, rightPointerB + 1);
       }
     }

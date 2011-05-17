@@ -88,54 +88,41 @@ test("filters", function () {
   equal(a.quickdiff("diff", b, ["divEqual", "spanEqual"]).type, "identical", "filter combination");
 });
 
-test("repeated groups", function () {
-  var a = $("<div><p><span class=\"a\"></span></p>");
-  var b = $("<div><p><span class=\"a\"></span><span class=\"b\"></span></p></div>");
-  
-  a.quickdiff("patch", b);
-  equal(innerHTML(a[0]), "<p><span class=\"a\"></span><span class=\"b\"></span></p>");
-  
-  var a = $("<div><p><span class=\"a\"></span>a</p>");
-  var b = $("<div><p><span class=\"a\"></span>a<span class=\"b\"></span></p></div>");
-  
-  a.quickdiff("patch", b);
-  equal(innerHTML(a[0]), "<p><span class=\"a\"></span>a<span class=\"b\"></span></p>");
-  
-  var a = $("<div><p><span class=\"a\"></span>a<span class=\"a\"></span>a</p>");
-  var b = $("<div><p><span class=\"a\"></span>a</p></div>");
-  
-  a.quickdiff("patch", b);
-  equal(innerHTML(a[0]), "<p><span class=\"a\"></span>a</p>");
-});
+function genDiv(content) {
+  return "<div>"+content+"</div>";
+}
 
-test("experimental", function () {
-  var a = $('<div><p><span>a</span></p></div>');
-  var b = $('<div><p>a<em>b</em>a</p></div>');
+function testTransition(a, b) {
+  var sa = "", sb = "", i, len, da, db;
+  for (i = 0, len = a.length; i < len; i++) {
+    sa = sa+genDiv(a[i]);
+  }
+  for (i = 0, len = b.length; i < len; i++) {
+    sb = sb+genDiv(b[i]);
+  }
+  da = $(genDiv(genDiv(sa)));
+  db = $(genDiv(genDiv(sb)));
   
-  a.quickdiff("patch", b);
-  equal(innerHTML(a[0]), "<p>a<em>b</em>a</p>");
-  
-  var a = $('<div><div></div><span></span><div></div><span></span><div></div></div>');
-  var b = $('<div><div></div><span></span><div></div><span></span></div>');
-  
-  a.quickdiff("patch", b);
-  equal(innerHTML(a[0]), "<div></div><span></span><div></div><span></span>");
-  
-  var a = $('<div><p><strong>hi</strong>a<strong>hi</strong>a<strong>hi</strong></p></div>');
-  var b = $('<div><p><strong>hi</strong>a<strong>hi</strong>a</p></div>');
-  
-  a.quickdiff("patch", b);
-  equal(innerHTML(a[0]), "<p><strong>hi</strong>a<strong>hi</strong>a</p>");
-  
-  var a = $('<div><p><em>hi</em><em>hi</em></p></div>');
-  var b = $('<div><p><em>hi</em></p></div>');
-  
-  a.quickdiff("patch", b);
-  equal(innerHTML(a[0]), "<p><em>hi</em></p>");
-  
-  var a = $('<div><p><em>hi</em>a<em>hi</em></p></div>');
-  var b = $('<div><p><em>hi</em></p></div>');
-  
-  a.quickdiff("patch", b);
-  equal(innerHTML(a[0]), "<p><em>hi</em></p>");
-})
+  da.quickdiff("patch", db);
+  equal(innerHTML(da[0]), genDiv(sb));
+}
+
+test ("cases", function () {
+  testTransition("xx", "xxxx");
+  testTransition("xxxx", "xx");
+  testTransition("xyx","xyxyx");
+  testTransition("xyxyx","xyx");
+  testTransition("xyxyx","xyxy");
+  testTransition("xyxyx","xy");
+  testTransition("xyxyx","x");
+  testTransition("xyxyx","");
+  testTransition("ab","abc");
+  testTransition("abc","ab");
+  testTransition("abcd","abxx");
+  testTransition("abc","axc");
+  testTransition("abcd","axxd");
+  testTransition("xab","abx");
+  testTransition("x","abc");
+  testTransition("x","abx");
+  testTransition("xx","abxx");
+});
