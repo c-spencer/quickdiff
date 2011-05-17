@@ -196,15 +196,15 @@
         rightPointerA = rev_diff[0][sharedroot],
         rightPointerB = rev_diff[1][sharedroot];
     
-      if (rightPointerA - leftPointer < 0) {
+      if (rightPointerA < rightPointerB) {
         return {
           type: "insert",
           source: {node: sourceel,
-            index: for_diff[sharedroot] - 1},
-          replace: childNodesSlice(destel, leftPointer, rightPointerB + 1)
+            index: leftPointer-1},
+          replace: childNodesSlice(destel, leftPointer, leftPointer + (rightPointerB-rightPointerA))
         };
       } else {
-        sourceSegment = childNodesSlice(sourceel, leftPointer, rightPointerA + 1);
+        sourceSegment = childNodesSlice(sourceel, leftPointer, leftPointer + (rightPointerA-rightPointerB));
         destSegment = childNodesSlice(destel, leftPointer, rightPointerB + 1);
       }
     }

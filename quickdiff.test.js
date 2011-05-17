@@ -87,3 +87,23 @@ test("filters", function () {
   var b = $("<div id=\"start\"><div id=\"test\"><span>a</span></div><div>b</div><div><span>change</span></div></div>");
   equal(a.quickdiff("diff", b, ["divEqual", "spanEqual"]).type, "identical", "filter combination");
 });
+
+test("repeated groups", function () {
+  var a = $("<div><p><span class=\"a\"></span></p>");
+  var b = $("<div><p><span class=\"a\"></span><span class=\"b\"></span></p></div>");
+  
+  a.quickdiff("patch", b);
+  equal(innerHTML(a[0]), "<p><span class=\"a\"></span><span class=\"b\"></span></p>");
+  
+  var a = $("<div><p><span class=\"a\"></span>a</p>");
+  var b = $("<div><p><span class=\"a\"></span>a<span class=\"b\"></span></p></div>");
+  
+  a.quickdiff("patch", b);
+  equal(innerHTML(a[0]), "<p><span class=\"a\"></span>a<span class=\"b\"></span></p>");
+  
+  var a = $("<div><p><span class=\"a\"></span>a<span class=\"a\"></span>a</p>");
+  var b = $("<div><p><span class=\"a\"></span>a</p></div>");
+  
+  a.quickdiff("patch", b);
+  equal(innerHTML(a[0]), "<p><span class=\"a\"></span>a</p>");
+})
